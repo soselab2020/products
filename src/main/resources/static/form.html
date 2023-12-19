@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Add Product</title>
+	<style type="text/css">
+		body {
+			font-family: Helvetica, "Microsoft YaHei", "LiHei Pro", TW-Kai;
+		}
+
+		input[type="text"],
+		input[type="number"] {
+			background-color: powderblue;
+		}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+	<H2>Product Form</H2>
+	<fieldset>
+		<legend>Add Product Data</legend>
+		<form action="#">
+			<p>
+				Product Name: <input type="text" id="name" />
+			</p>
+			<p>
+				Price: <input type="number" id="price" />
+			</p>
+			<input type="button" value="Submit" onclick="postData()" />
+		</form>
+	</fieldset>
+	<script>
+		function postData() {
+			let requestURL = "products";
+			let dataJSON = {};
+			//dataJSON["id"] = $("#id").val();
+			dataJSON["name"] = $("#name").val();
+			dataJSON["price"] = parseInt($("#price").val());
+
+			$.ajax({ // Use Ajax to POST data
+				url: requestURL,
+				data: JSON.stringify(dataJSON),
+				type: "POST",
+				dataType: "json",
+				contentType: "application/json;charset=utf-8",
+				success: function (returnData) {
+					window.alert("New product is added successfully!");
+					document.location.href = "/";
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.status);
+					console.log(thrownError);
+				}
+			});
+		}
+	</script>
+</body>
+
+</html>

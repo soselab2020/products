@@ -1,0 +1,101 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Product List</title>
+    <style type="text/css">
+        body {
+            font-family: Helvetica, "Microsoft YaHei", "LiHei Pro", TW-Kai;
+        }
+
+        table {
+            background-color: powderblue;
+            border-collapse: collapse;
+            border: 1px solid gray;
+            width: 50%;
+        }
+
+        td {
+            padding: 5px;
+        }
+
+        tr:nth-child(odd) {
+            background-color: white;
+        }
+    </style>
+</head>
+
+<H2>Product List</H2>
+
+<body>
+    <p><input type="text" id="userQuery"><button id="filter" onclick="filterProduct()">Filter</button></p>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody id="menu">
+        </tbody>
+    </table>
+    <br />
+    Go to <a href="form.html">Product Form</a> to add a new product.
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        const baseUrl = "products";
+
+        $.getJSON(baseUrl, function (data) {
+            for (let item of data) {
+                let content =
+                    `<tr>
+                        <td>${item.id}</td>
+                        <td>${item.name}</td>
+                        <td>${item.price}</td>
+                        <td><button onclick='deleteProduct("${item.id}")'>Delete</button></td>
+                     </tr>`;
+                $("#menu").append(content);
+            }
+        });
+
+        function filterProduct() {
+            // 取得value屬性值
+            let target = $("#userQuery").val();
+
+            // 比對所有tr元素
+            $("#menu tr").each(function () {
+                // 將所有li元素隱藏不顯示
+                $(this).animate({ "opacity": 0 }, 300, function () {
+                    $(this).hide();
+
+                    if ($(this).text().includes(target)) {
+                        // 顯示符合篩選條件的元素
+                        $(this).show();
+                        $(this).animate({ "opacity": 1 }, 300);
+                    }
+                });
+            });
+        }
+
+        function deleteProduct(productId) {
+            $.ajax({
+                type: "DELETE",
+                url: baseUrl + "/" + productId,
+                success: function () {
+                    window.alert("Product " + productId + " is deleted successfully!");
+                    location.reload();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.status);
+                    console.log(thrownError);
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>
