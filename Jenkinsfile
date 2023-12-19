@@ -12,7 +12,6 @@ pipeline {
 		stage('Test'){
 			steps{
 				bat "mvn test"
-				bat "set ATLAS_STRING=\"mongodb+srv://admin:admin6631@cluster0.ctev7.mongodb.net/demo?retryWrites=true&w=majority\""
 			}
 		}
 
